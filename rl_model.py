@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1x1YeQShaOm5xDRvSwui0nHfg1j4hb3Sy
 """
 
-!pip install torch random pandas collections
+pip install torch random pandas collections
 
 import torch
 import torch.nn as nn
