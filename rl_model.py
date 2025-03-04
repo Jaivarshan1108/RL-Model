@@ -1,7 +1,10 @@
 import os
 
 # Install required libraries if not installed
-os.system("pip install torch pandas flask")from flask import Flask, request, jsonify 
+os.system("pip install torch pandas flask")
+
+
+from flask import Flask, request, jsonify 
 import torch
 import torch.nn as nn
 import torch.optim as optim
