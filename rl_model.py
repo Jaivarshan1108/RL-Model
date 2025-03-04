@@ -1,10 +1,17 @@
-import streamlit as st
+import os
+
+# Install required libraries if not installed
+os.system("pip install torch pandas flask")from flask import Flask, request, jsonify 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import random
 import pandas as pd
 from collections import deque
+
+
+# Initialize Flask App
+app = Flask(__name__)
 
 # Load dataset
 df = pd.read_csv("charging_data.csv")
@@ -56,15 +63,20 @@ def get_reward(action, hour):
     else:
         return 1 if action == 0 else -0.5  
 
-# Streamlit UI
-st.title("🔋 EV Charging Pricing Adjustment")
+# Flask API for POST request
+@app.route("/get-percentage", methods=["POST"])
+def get_percentage():
+    data = request.json
+    if "hour" not in data:
+        return jsonify({"error": "Hour is required"}), 400
 
-# User input for current hour
-hour = st.number_input("Enter the current hour (0-23)", min_value=0, max_value=23, step=1)
-
-if st.button("Calculate Price Adjustment"):
+    hour = int(data["hour"])
     reward = get_reward(1, hour)  # Action = 1 (increase)
+    
     percentage = 1.2 if reward > 0 else 1.0  # Adjust price by 1.2% or keep it standard
 
-    st.success(f"🔹 Current Hour: **{hour}**")
-    st.success(f"📊 Charging Price Adjustment: **{percentage}x**")
+    return jsonify({"hour": hour, "percentage": percentage})
+
+# Run Flask App
+if __name__ == "__main__":
+    app.run(debug=True, port=5001)
