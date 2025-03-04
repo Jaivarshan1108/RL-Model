@@ -55,12 +55,7 @@ class QNetwork(nn.Module):
         return self.fc3(x)
 
 # Initialize Model
-device = torch.device("cuda" if to
-
-
-
-
-                      rch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = QNetwork().to(device)
 optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 loss_fn = nn.MSELoss()
